@@ -1,14 +1,12 @@
 c:\users\evie\documents\visual studio 2017\Projects\GumtreeCarJSON\GumtreeCarJSON\bin\Debug\GumtreeCarJSON.exe.config
 c:\users\evie\documents\visual studio 2017\Projects\GumtreeCarJSON\GumtreeCarJSON\bin\Debug\GumtreeCarJSON.exe
 c:\users\evie\documents\visual studio 2017\Projects\GumtreeCarJSON\GumtreeCarJSON\bin\Debug\GumtreeCarJSON.pdb
-c:\users\evie\documents\visual studio 2017\Projects\GumtreeCarJSON\GumtreeCarJSON\bin\Debug\ClosedXML.dll
 c:\users\evie\documents\visual studio 2017\Projects\GumtreeCarJSON\GumtreeCarJSON\bin\Debug\DocumentFormat.OpenXml.dll
 c:\users\evie\documents\visual studio 2017\Projects\GumtreeCarJSON\GumtreeCarJSON\bin\Debug\FastMember.Signed.dll
 c:\users\evie\documents\visual studio 2017\Projects\GumtreeCarJSON\GumtreeCarJSON\bin\Debug\HtmlAgilityPack.dll
 c:\users\evie\documents\visual studio 2017\Projects\GumtreeCarJSON\GumtreeCarJSON\bin\Debug\Newtonsoft.Json.dll
 c:\users\evie\documents\visual studio 2017\Projects\GumtreeCarJSON\GumtreeCarJSON\bin\Debug\System.IO.FileSystem.Primitives.dll
 c:\users\evie\documents\visual studio 2017\Projects\GumtreeCarJSON\GumtreeCarJSON\bin\Debug\System.IO.Packaging.dll
-c:\users\evie\documents\visual studio 2017\Projects\GumtreeCarJSON\GumtreeCarJSON\bin\Debug\ClosedXML.xml
 c:\users\evie\documents\visual studio 2017\Projects\GumtreeCarJSON\GumtreeCarJSON\bin\Debug\DocumentFormat.OpenXml.xml
 c:\users\evie\documents\visual studio 2017\Projects\GumtreeCarJSON\GumtreeCarJSON\bin\Debug\HtmlAgilityPack.pdb
 c:\users\evie\documents\visual studio 2017\Projects\GumtreeCarJSON\GumtreeCarJSON\bin\Debug\HtmlAgilityPack.xml

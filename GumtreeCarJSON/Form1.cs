@@ -1,18 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using HtmlAgilityPack;
-using ClosedXML.Excel;
+using System.Collections;
 
 namespace GumtreeCarJSON {
     public partial class Form1 : Form {
@@ -23,13 +16,13 @@ namespace GumtreeCarJSON {
         }
 
         OrderedDictionary currentCar = new OrderedDictionary();
-        string dataLayerStart, dataLayerEnd;
+        //string dataLayerStart, dataLayerEnd;
         string[] attributes;
-        string saveFile = @"D:\Temp\Car Database\Car v2.xlsx";
+        string saveFile = @"D:\Temp\Car Database\Car v2.csv";
 
         public void InitString() {
-            dataLayerStart = "var dataLayer = ";
-            dataLayerEnd = "\n<!--GTM Pt1 -- >";
+            //dataLayerStart = "var dataLayer = ";
+           // dataLayerEnd = "\n<!--GTM Pt1 -- >";
             attributes = new string[] { "vrn", "vehicle_make", "vehicle_model", "vehicle_registration_year", "seller_type", "vehicle_mileage", "vehicle_colour", "price", "vehicle_not_writeoff", "vehicle_vhc_checked", "URL", "Location", "MOT expiry" };
             foreach (string a in attributes)
                 currentCar.Add(a, "");
@@ -46,8 +39,10 @@ namespace GumtreeCarJSON {
                 foreach (string file in openFileDialog1.FileNames) {
                     //Retrieve JSON
                     string fullHTML = File.ReadAllText(file);
-                    string dataLayer = ExtractRegex(fullHTML, dataLayerStart, dataLayerEnd);
+                    string dataLayer = ExtractRegex(fullHTML, "var dataLayer = ", ";\n<!-- GTM Pt1 -->");
                     dynamic obj = JsonConvert.DeserializeObject(dataLayer);
+
+                    //textBox1.AppendText(dataLayer);
 
                     //Unfortunately I do not know if there is a way to turn a string into the json .dot thing, if I could, then the following would be a one line loop
                     //Maybe in a future commit
@@ -66,37 +61,32 @@ namespace GumtreeCarJSON {
                     currentCar[attributes[10]] = ExtractRegex(fullHTML, "https://", " -->");
                     currentCar[attributes[11]] = ExtractLocation(fullHTML);
 
-                    WriteToXLSX();
+                    WriteToCSV();
                 }
             }
         }
 
-        public void WriteToXLSX() {
+        //ClosedXML is huge! Best write to CSV instead
+        public void WriteToCSV() {
             if (!Directory.Exists(Path.GetDirectoryName(saveFile))) 
                 Directory.CreateDirectory(Path.GetDirectoryName(saveFile));
 
-            if (!File.Exists(saveFile))
-                File.Create(saveFile);
-
-            var wb = new XLWorkbook(saveFile);
-            var ws = wb.Worksheet(0);
-
-            System.Collections.ICollection vals = currentCar.Values;
-
-            int rows = ws.RowsUsed().Count();
-
-            if (rows == 0) {
-                for (int i = 0; i < vals.Count; i++) {
-                    ws.Cell(1, i).Value = attributes[0];
-                }
-                rows = ws.RowsUsed().Count();
+            if (!File.Exists(saveFile)) {
+                using (StreamWriter writer = File.CreateText(saveFile)) {
+                    foreach (string a in attributes)
+                        writer.Write(a + ",");
+                    writer.Write("\n");
+                }               
             }
 
-            for (int i = 0; i < vals.Count; i++)
-                ws.Cell(rows + 1, i + 1).Value = currentCar[i];
-
-            wb.SaveAs(saveFile);
+            using (StreamWriter writer = File.AppendText(saveFile)) {
+                foreach (DictionaryEntry x in currentCar) 
+                    writer.Write(x.Value.ToString() + ",");
+                writer.Write("\n");
+            }
         }
+
+        
 
         public string ExtractLocation(string source) {
             var doc = new HtmlAgilityPack.HtmlDocument();
