@@ -36,10 +36,10 @@ namespace GumtreeCarJSON {
 
         public void GumtreeCarHTMLExtract() {
             if (openFileDialog1.ShowDialog() == DialogResult.OK) {
-                foreach (string file in openFileDialog1.FileNames) {
+                foreach (string fileName in openFileDialog1.FileNames) {
                     //Retrieve JSON
-                    string fullHTML = File.ReadAllText(file);
-                    string dataLayer = ExtractRegex(fullHTML, "var dataLayer = ", ";\n<!-- GTM Pt1 -->");
+                    string fullHTML = File.ReadAllText(fileName);
+                    string dataLayer = ExtractRegex(fullHTML, "var dataLayer = ", "}];") + "}]";
                     dynamic obj = JsonConvert.DeserializeObject(dataLayer);
 
                     //textBox1.AppendText(dataLayer);
@@ -57,21 +57,23 @@ namespace GumtreeCarJSON {
                     currentCar[attributes[8]] = obj[0].a.attr.vehicle_not_writeoff;
                     currentCar[attributes[9]] = obj[0].a.attr.vehicle_vhc_checked;
 
-                    //Retrieve URL and location from main source as this is a downloaded HTML file on local drive
+                    //Retrieve URL and location from downloaded HTML file on local drive
                     currentCar[attributes[10]] = ExtractRegex(fullHTML, "https://", " -->");
-                    currentCar[attributes[11]] = ExtractLocation(fullHTML);
+                    //currentCar[attributes[11]] = ExtractRegex(fileName, " _ in ", " _ ").Replace(",","");
+                    currentCar[attributes[11]] = ExtractLocation(fullHTML).Replace(",", "");
 
                     WriteToCSV();
                 }
             }
         }
 
-        //ClosedXML is huge! Best write to CSV instead
+        //ClosedXML is huge! Best write to CSV instead for the moment
         public void WriteToCSV() {
             if (!Directory.Exists(Path.GetDirectoryName(saveFile))) 
                 Directory.CreateDirectory(Path.GetDirectoryName(saveFile));
 
             if (!File.Exists(saveFile)) {
+                //Create and write header
                 using (StreamWriter writer = File.CreateText(saveFile)) {
                     foreach (string a in attributes)
                         writer.Write(a + ",");
@@ -85,8 +87,6 @@ namespace GumtreeCarJSON {
                 writer.Write("\n");
             }
         }
-
-        
 
         public string ExtractLocation(string source) {
             var doc = new HtmlAgilityPack.HtmlDocument();
