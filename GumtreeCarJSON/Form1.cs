@@ -16,13 +16,10 @@ namespace GumtreeCarJSON {
         }
 
         OrderedDictionary currentCar = new OrderedDictionary();
-        //string dataLayerStart, dataLayerEnd;
         string[] attributes;
         string saveFile = @"D:\Temp\Car Database\Car v2.csv";
 
         public void InitString() {
-            //dataLayerStart = "var dataLayer = ";
-           // dataLayerEnd = "\n<!--GTM Pt1 -- >";
             attributes = new string[] { "vrn", "vehicle_make", "vehicle_model", "vehicle_registration_year", "seller_type", "vehicle_mileage", "vehicle_colour", "price", "vehicle_not_writeoff", "vehicle_vhc_checked", "URL", "Location", "MOT expiry" };
             foreach (string a in attributes)
                 currentCar.Add(a, "");
@@ -42,8 +39,6 @@ namespace GumtreeCarJSON {
                     string dataLayer = ExtractRegex(fullHTML, "var dataLayer = ", "}];") + "}]";
                     dynamic obj = JsonConvert.DeserializeObject(dataLayer);
 
-                    //textBox1.AppendText(dataLayer);
-
                     //Unfortunately I do not know if there is a way to turn a string into the json .dot thing, if I could, then the following would be a one line loop
                     //Maybe in a future commit
                     currentCar[attributes[0]] = obj[0].a.attr.vrn;
@@ -59,7 +54,6 @@ namespace GumtreeCarJSON {
 
                     //Retrieve URL and location from downloaded HTML file on local drive
                     currentCar[attributes[10]] = ExtractRegex(fullHTML, "https://", " -->");
-                    //currentCar[attributes[11]] = ExtractRegex(fileName, " _ in ", " _ ").Replace(",","");
                     currentCar[attributes[11]] = ExtractLocation(fullHTML).Replace(",", "");
 
                     WriteToCSV();
